@@ -47,7 +47,7 @@ jobs:
       - name: Upload build
         uses: actions/upload-artifact@v2
         with:
-          name: mentorship-page-${{ github.sha }}
+          name: mentorship-page-2020-${{ github.sha }}
           path: build/
 
   deploy-gh-pages:
@@ -59,7 +59,7 @@ jobs:
       - name: Download build
         uses: actions/download-artifact@v2
         with:
-          name: mentorship-page-${{ github.sha }}
+          name: mentorship-page-2020-${{ github.sha }}
           path: build/
       - run: touch build/.nojekyll
 
