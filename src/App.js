@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import Protect from "react-app-protect";
 
 import Header from "./components/header";
 import ProfileCard from "./components/profile-card";
@@ -11,6 +12,7 @@ import { mentors, mentorIds } from "./mentors";
 import { fieldSearch } from "./search";
 
 import "react-tabs/style/react-tabs.css";
+import "react-app-protect/dist/index.css";
 import "./App.css";
 
 const setHash = (hash) => window.history.replaceState({}, "", `#${hash}`);
@@ -79,52 +81,54 @@ function App() {
   );
 
   return (
-    <div className="container">
-      <Header />
+    <Protect sha512="7361b1fc13ede3f35727be2cdedc97263a68a268e0a817aa1c801f82462104255c59175ebdd24affce1ae89a4aa1173f035cad94a2faac8db6426bd30b98cc31">
+      <div className="container">
+        <Header />
 
-      <SearchBar
-        value={searchValue}
-        waveIndex={waveIndex}
-        onSearchChange={setSearchValue}
-        onSearchSelect={setSearchQuery}
-      />
+        <SearchBar
+          value={searchValue}
+          waveIndex={waveIndex}
+          onSearchChange={setSearchValue}
+          onSearchSelect={setSearchQuery}
+        />
 
-      <Tabs
-        className="tabs-container"
-        selectedIndex={convertIndex(waveIndex)}
-        onSelect={activateTab}
-      >
-        <TabList>
-          {/* Sort waves in descending order. */}
-          {waves
-            .slice()
-            .reverse()
-            .map(({ name }, i) => (
-              <Tab key={i}>{name}</Tab>
-            ))}
-        </TabList>
-
-        {waves.map((_, i) => (
-          <TabPanel key={i}>
-            <div className="card-container">
-              {visibleMentorIds.map((mentorId) => (
-                <ProfileCard
-                  key={mentorId}
-                  mentor={mentors[mentorId]}
-                  onReadMore={() => activateModal(mentorId)}
-                />
+        <Tabs
+          className="tabs-container"
+          selectedIndex={convertIndex(waveIndex)}
+          onSelect={activateTab}
+        >
+          <TabList>
+            {/* Sort waves in descending order. */}
+            {waves
+              .slice()
+              .reverse()
+              .map(({ name }, i) => (
+                <Tab key={i}>{name}</Tab>
               ))}
-            </div>
-          </TabPanel>
-        ))}
-      </Tabs>
+          </TabList>
 
-      <ProfileModal
-        isOpen={isModalOpen}
-        mentor={mentors[activeMentorId]}
-        onClose={() => setIsModalOpen(false)}
-      />
-    </div>
+          {waves.map((_, i) => (
+            <TabPanel key={i}>
+              <div className="card-container">
+                {visibleMentorIds.map((mentorId) => (
+                  <ProfileCard
+                    key={mentorId}
+                    mentor={mentors[mentorId]}
+                    onReadMore={() => activateModal(mentorId)}
+                  />
+                ))}
+              </div>
+            </TabPanel>
+          ))}
+        </Tabs>
+
+        <ProfileModal
+          isOpen={isModalOpen}
+          mentor={mentors[activeMentorId]}
+          onClose={() => setIsModalOpen(false)}
+        />
+      </div>
+    </Protect>
   );
 }
 
